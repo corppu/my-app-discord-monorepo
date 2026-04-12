@@ -20,8 +20,5 @@
   "dependencies": {
     "@my-app/common": "*"
   },
-  "devDependencies": {
-    "@types/react": "^19.0.0",
-    "typescript": "*"
-  }
+  "devDependencies": {}
 }

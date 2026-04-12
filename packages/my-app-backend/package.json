@@ -17,12 +17,9 @@
   },
   "dependencies": {
     "@my-app/common": "*",
-    "discord.js": "^14.18.0",
     "pg": "^8.13.0"
   },
   "devDependencies": {
-    "@types/node": "*",
-    "@types/pg": "^8.11.11",
-    "typescript": "*"
+    "@types/pg": "^8.11.11"
   }
 }

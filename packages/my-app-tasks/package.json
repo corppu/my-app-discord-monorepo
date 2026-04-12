@@ -12,8 +12,5 @@
     "@my-app/backend": "*",
     "@my-app/common": "*"
   },
-  "devDependencies": {
-    "@types/node": "*",
-    "typescript": "*"
-  }
+  "devDependencies": {}
 }
