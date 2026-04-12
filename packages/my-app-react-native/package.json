@@ -8,6 +8,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "build:android": "cd android && ./gradlew assembleRelease",
+    "build": "echo 'No build step for react-native'",
     "clean": "rm -rf node_modules/.cache"
   },
   "dependencies": {

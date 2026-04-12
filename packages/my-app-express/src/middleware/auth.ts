@@ -1,10 +1,12 @@
+
 import type { Request, Response, NextFunction } from "express";
 import { SessionRepository } from "@my-app/backend";
 import { getPool } from "@my-app/backend";
 import { verifyJwt } from "../services/jwtService.js";
+import type { SessionDTO } from "@my-app/common";
 
 export interface AuthRequest extends Request {
-  sessionData?: unknown; // Use 'unknown' or import type { SessionDTO } from "@my-app/common" and use SessionDTO
+  sessionData?: SessionDTO;
   userId?: string;
 }
 

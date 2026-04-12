@@ -3,11 +3,22 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/my-app-common",
+      "packages/my-app-tools",
+      "packages/my-app-react",
+      "packages/my-app-backend",
+      "packages/my-app-react-web",
+      "packages/my-app-express",
+      "packages/my-app-tasks",
+      "packages/my-app-discord-bot",
+      "packages/my-app-react-native"
+    ]
+  },
   "scripts": {
     "build": "npm run build --workspaces --if-present",
+    "build:ordered": "npm --workspace packages/my-app-common run build && npm --workspace packages/my-app-tools run build && npm --workspace packages/my-app-react run build && npm --workspace packages/my-app-backend run build && npm --workspace packages/my-app-react-web run build && npm --workspace packages/my-app-express run build && npm --workspace packages/my-app-tasks run build && npm --workspace packages/my-app-discord-bot run build && npm --workspace packages/my-app-react-native run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "npm run test --workspaces --if-present",
