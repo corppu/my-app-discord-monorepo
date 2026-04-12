@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import { runMigrations } from "@my-app/backend";
 import { authRouter } from "./routes/auth.js";
 import { nativeRouter } from "./routes/native.js";
+import { csrfProtection } from "./middleware/csrf.js";
 
 const app = express();
 const PORT = parseInt(process.env["PORT"] ?? "3000", 10);
@@ -40,6 +41,7 @@ app.use(rateLimit({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(csrfProtection);
 
 // Routes
 app.use("/api/auth", authRouter);
