@@ -1,6 +1,5 @@
 import type { Client } from "discord.js";
 import { GuildRepository, UserRepository, EventRepository, getPool } from "@my-app/backend";
-import { UserDTOBuilder, GuildMemberDTOBuilder, EventDTOBuilder } from "@my-app/common";
 import type { EventStatus, EventEntityType } from "@my-app/common";
 
 function discordEventStatusToEventStatus(status: number): EventStatus {
@@ -44,27 +43,20 @@ export async function syncGuild(client: Client, guildId: string): Promise<void> 
     if (member.user.bot) continue;
 
     try {
-      const user = await userRepo.upsert(
-        new UserDTOBuilder()
-          .setId("00000000-0000-4000-8000-000000000000")
-          .setDiscordId(member.user.id)
-          .setUsername(member.user.username)
-          .setDisplayName(member.displayName)
-          .setAvatarUrl(member.user.displayAvatarURL() ?? undefined)
-          .setCreatedAt(new Date())
-          .setUpdatedAt(new Date())
-          .build()
-      );
+      const user = await userRepo.upsert({
+        discordId: member.user.id,
+        username: member.user.username,
+        displayName: member.displayName,
+        avatarUrl: member.user.displayAvatarURL() ?? undefined,
+      });
 
-      await guildRepo.upsertMember(
-        new GuildMemberDTOBuilder()
-          .setUserId(user.id)
-          .setGuildId(discordGuild.id)
-          .setNickname(member.nickname ?? undefined)
-          .setRoles(member.roles.cache.filter((r) => r.name !== "@everyone").map((r) => r.id))
-          .setJoinedAt(member.joinedAt ?? new Date())
-          .build()
-      );
+      await guildRepo.upsertMember({
+        userId: user.id,
+        guildId: discordGuild.id,
+        nickname: member.nickname ?? undefined,
+        roles: member.roles.cache.filter((r) => r.name !== "@everyone").map((r) => r.id),
+        joinedAt: member.joinedAt ?? new Date(),
+      });
     } catch (err) {
       console.error(`Error syncing member ${member.user.id}:`, err);
     }
@@ -74,21 +66,16 @@ export async function syncGuild(client: Client, guildId: string): Promise<void> 
   const events = await discordGuild.scheduledEvents.fetch();
   for (const event of events.values()) {
     try {
-      await eventRepo.upsert(
-        new EventDTOBuilder()
-          .setId("00000000-0000-4000-8000-000000000000")
-          .setGuildId(event.guildId)
-          .setName(event.name)
-          .setDescription(event.description ?? undefined)
-          .setChannelId(event.channelId ?? undefined)
-          .setScheduledStartAt(event.scheduledStartAt ?? new Date())
-          .setScheduledEndAt(event.scheduledEndAt ?? undefined)
-          .setStatus(discordEventStatusToEventStatus(event.status))
-          .setEntityType(discordEntityTypeToEntityType(event.entityType))
-          .setCreatedAt(event.createdAt)
-          .setUpdatedAt(new Date())
-          .build()
-      );
+      await eventRepo.upsert({
+        guildId: event.guildId,
+        name: event.name,
+        description: event.description ?? undefined,
+        channelId: event.channelId ?? undefined,
+        scheduledStartAt: event.scheduledStartAt ?? new Date(),
+        scheduledEndAt: event.scheduledEndAt ?? undefined,
+        status: discordEventStatusToEventStatus(event.status),
+        entityType: discordEntityTypeToEntityType(event.entityType),
+      });
     } catch (err) {
       console.error(`Error syncing event ${event.id}:`, err);
     }

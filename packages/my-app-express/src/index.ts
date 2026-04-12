@@ -8,12 +8,25 @@ import { nativeRouter } from "./routes/native.js";
 
 const app = express();
 const PORT = parseInt(process.env["PORT"] ?? "3000", 10);
+const NODE_ENV = process.env["NODE_ENV"] ?? "development";
+
+// Parse allowed origins from env or use localhost defaults for development
+const allowedOrigins: string[] =
+  process.env["ALLOWED_ORIGINS"]
+    ? process.env["ALLOWED_ORIGINS"].split(",").map((o) => o.trim())
+    : NODE_ENV === "development"
+      ? ["http://localhost:8080", "http://localhost:3000"]
+      : [];
 
 // Security middleware
 app.use(cors({
-  origin: process.env["NODE_ENV"] === "production"
-    ? process.env["ALLOWED_ORIGINS"]?.split(",") ?? []
-    : true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 

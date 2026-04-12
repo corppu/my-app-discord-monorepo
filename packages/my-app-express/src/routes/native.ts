@@ -15,8 +15,8 @@ nativeRouter.get("/session", requireNativeAuth, async (req: AuthRequest, res) =>
   }
 
   // Auto-refresh if within 5 minutes of expiry
-  const fiveMinutes = 5 * 60 * 1000;
-  if (session.expiresAt.getTime() - Date.now() < fiveMinutes) {
+  const fiveMinutesMs = 5 * 60 * 1000;
+  if (session.expiresAt.getTime() - Date.now() < fiveMinutesMs) {
     try {
       const pool = getPool();
       const sessionRepo = new SessionRepository(pool);

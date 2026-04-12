@@ -90,10 +90,6 @@ export class SessionDTOBuilder {
       throw new ValidationError("validation.invalidDate", "expiresAt", this.locale);
     }
 
-    if (expiresAt < new Date()) {
-      throw new ValidationError("validation.expiredSession", "expiresAt", this.locale);
-    }
-
     if (!createdAt || !(createdAt instanceof Date) || isNaN(createdAt.getTime())) {
       throw new ValidationError("validation.invalidDate", "createdAt", this.locale);
     }
