@@ -2,14 +2,16 @@ import type { GuildDTO, GuildMemberDTO, UserDTO, SessionDTO, EventDTO } from "..
 import { GuildMemberDTOBuilder, UserDTOBuilder, SessionDTOBuilder, EventDTOBuilder } from "../builders";
 import type { EventStatus, EventEntityType } from "../types";
 
+import { GuildDTOBuilder } from "../builders";
+
 export function mapRecordToGuildDTO(row: Record<string, unknown>): GuildDTO {
-  return {
-    id: String(row["id"]),
-    name: String(row["name"]),
-    iconUrl: row["icon_url"] ? String(row["icon_url"]) : undefined,
-    memberCount: Number(row["member_count"]),
-    createdAt: new Date(String(row["created_at"]))
-  };
+  return new GuildDTOBuilder()
+    .setId(row["id"])
+    .setName(row["name"])
+    .setIconUrl(row["icon_url"])
+    .setMemberCount(row["member_count"])
+    .setCreatedAt(row["created_at"])
+    .build();
 }
 
 export function mapRecordToGuildMemberDTO(row: Record<string, unknown>): GuildMemberDTO {
