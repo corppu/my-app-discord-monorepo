@@ -1,4 +1,4 @@
-FROM node:22-alpine AS builder
+FROM node:25.8.2-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 COPY packages/my-app-common/package.json ./packages/my-app-common/
@@ -12,7 +12,7 @@ RUN npm run build --workspace=@my-app/common
 RUN npm run build --workspace=@my-app/backend
 RUN npm run build --workspace=@my-app/discord-bot
 
-FROM node:22-alpine
+FROM node:25.8.2-alpine
 WORKDIR /app
 COPY --from=builder /app/packages/my-app-common/dist ./packages/my-app-common/dist
 COPY --from=builder /app/packages/my-app-common/package.json ./packages/my-app-common/

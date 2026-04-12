@@ -1,11 +1,11 @@
 {
   "name": "my-app-dev",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-25-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm install -g npm@11.7.0 && npm install",
   "customizations": {
     "vscode": {
       "extensions": [
