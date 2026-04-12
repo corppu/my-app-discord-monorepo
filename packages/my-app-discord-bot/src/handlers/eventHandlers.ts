@@ -1,10 +1,5 @@
-import {
-  Client,
-  GatewayIntentBits,
-  Events,
-  type GuildMember,
-  type GuildScheduledEvent,
-} from "discord.js";
+import type { Client, GuildMember, GuildScheduledEvent } from "discord.js";
+import { Events } from "discord.js";
 import { GuildRepository, UserRepository, EventRepository, getPool } from "@my-app/backend";
 import type { EventStatus, EventEntityType } from "@my-app/common";
 

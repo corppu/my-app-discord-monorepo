@@ -4,9 +4,10 @@ import { getPool } from "@my-app/backend";
 import { verifyJwt } from "../services/jwtService.js";
 
 export interface AuthRequest extends Request {
-  sessionData?: import("@my-app/common").SessionDTO;
+  sessionData?: unknown; // Use 'unknown' or import type { SessionDTO } from "@my-app/common" and use SessionDTO
   userId?: string;
 }
+
 
 export async function requireAuth(
   req: AuthRequest,
