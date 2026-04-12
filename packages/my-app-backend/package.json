@@ -1,0 +1,28 @@
+{
+  "name": "@my-app/backend",
+  "version": "1.0.0",
+  "description": "Backend repositories for PostgreSQL and Discord API",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "migrate": "node dist/database/migrate.js"
+  },
+  "dependencies": {
+    "@my-app/common": "*",
+    "discord.js": "^14.18.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "@types/pg": "^8.11.11",
+    "typescript": "*"
+  }
+}

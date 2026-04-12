@@ -1,0 +1,81 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-myapp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-myapp_password}
+      POSTGRES_DB: ${POSTGRES_DB:-myapp_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-myapp} -d ${POSTGRES_DB:-myapp_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  my-app-express:
+    build:
+      context: .
+      dockerfile: packages/my-app-express/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-myapp}:${POSTGRES_PASSWORD:-myapp_password}@postgres:5432/${POSTGRES_DB:-myapp_db}
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${EXPRESS_PORT:-3000}
+      OPENID_ISSUER_URL: ${OPENID_ISSUER_URL}
+      OPENID_CLIENT_ID: ${OPENID_CLIENT_ID}
+      OPENID_CLIENT_SECRET: ${OPENID_CLIENT_SECRET}
+      OPENID_REDIRECT_URI: ${OPENID_REDIRECT_URI}
+      JWT_SECRET: ${JWT_SECRET}
+      SESSION_SECRET: ${SESSION_SECRET}
+    ports:
+      - "${EXPRESS_PORT:-3000}:3000"
+
+  my-app-discord-bot:
+    build:
+      context: .
+      dockerfile: packages/my-app-discord-bot/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-myapp}:${POSTGRES_PASSWORD:-myapp_password}@postgres:5432/${POSTGRES_DB:-myapp_db}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      DISCORD_GUILD_IDS: ${DISCORD_GUILD_IDS}
+      NODE_ENV: ${NODE_ENV:-development}
+
+  my-app-tasks:
+    build:
+      context: .
+      dockerfile: packages/my-app-tasks/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-myapp}:${POSTGRES_PASSWORD:-myapp_password}@postgres:5432/${POSTGRES_DB:-myapp_db}
+      NODE_ENV: ${NODE_ENV:-development}
+
+  my-app-react-web:
+    build:
+      context: .
+      dockerfile: packages/my-app-react-web/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    depends_on:
+      - my-app-express
+
+volumes:
+  postgres_data:

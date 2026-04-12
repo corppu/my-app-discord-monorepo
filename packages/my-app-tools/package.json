@@ -1,0 +1,18 @@
+{
+  "name": "@my-app/tools",
+  "version": "1.0.0",
+  "description": "Scripts for reading, validating and building environment variables",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "my-app-tools": "./dist/scripts/setup-env.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "setup-env": "node dist/scripts/setup-env.js"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}

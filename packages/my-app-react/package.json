@@ -1,0 +1,27 @@
+{
+  "name": "@my-app/react",
+  "version": "1.0.0",
+  "description": "Common React hooks and state management for DTO validation",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "dependencies": {
+    "@my-app/common": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "typescript": "*"
+  }
+}
