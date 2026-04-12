@@ -1,29 +1,11 @@
 import type { Pool } from "pg";
-import { GuildMemberDTOBuilder } from "@my-app/common";
+import { mapRecordToGuildDTO, mapRecordToGuildMemberDTO } from "@my-app/common";
 import type { GuildMemberDTO, GuildDTO } from "@my-app/common";
 
 export class GuildRepository {
   constructor(private readonly pool: Pool) {}
 
-  private mapGuildRow(row: Record<string, unknown>): GuildDTO {
-    return {
-      id: String(row["id"]),
-      name: String(row["name"]),
-      iconUrl: row["icon_url"] ? String(row["icon_url"]) : undefined,
-      memberCount: Number(row["member_count"]),
-      createdAt: new Date(String(row["created_at"])),
-    };
-  }
 
-  private mapMemberRow(row: Record<string, unknown>): GuildMemberDTO {
-    return new GuildMemberDTOBuilder()
-      .setUserId(String(row["user_id"]))
-      .setGuildId(String(row["guild_id"]))
-      .setNickname(row["nickname"] ? String(row["nickname"]) : undefined)
-      .setRoles(Array.isArray(row["roles"]) ? (row["roles"] as string[]) : [])
-      .setJoinedAt(new Date(String(row["joined_at"])))
-      .build();
-  }
 
   async findGuildById(id: string): Promise<GuildDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
@@ -31,7 +13,7 @@ export class GuildRepository {
       [id]
     );
     const row = result.rows[0];
-    return row ? this.mapGuildRow(row) : null;
+    return row ? mapRecordToGuildDTO(row) : null;
   }
 
   async upsertGuild(data: Omit<GuildDTO, "createdAt">): Promise<GuildDTO> {
@@ -48,7 +30,7 @@ export class GuildRepository {
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to upsert guild");
-    return this.mapGuildRow(row);
+    return mapRecordToGuildDTO(row);
   }
 
   async findMembersByGuildId(guildId: string): Promise<GuildMemberDTO[]> {
@@ -56,7 +38,7 @@ export class GuildRepository {
       "SELECT * FROM guild_members WHERE guild_id = $1",
       [guildId]
     );
-    return result.rows.map((row) => this.mapMemberRow(row));
+    return result.rows.map((row) => mapRecordToGuildMemberDTO(row));
   }
 
   async upsertMember(data: GuildMemberDTO): Promise<GuildMemberDTO> {
@@ -72,7 +54,7 @@ export class GuildRepository {
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to upsert guild member");
-    return this.mapMemberRow(row);
+    return mapRecordToGuildMemberDTO(row);
   }
 
   async deleteMember(userId: string, guildId: string): Promise<boolean> {

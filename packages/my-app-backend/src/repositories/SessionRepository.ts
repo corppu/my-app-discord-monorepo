@@ -1,22 +1,11 @@
 import type { Pool } from "pg";
-import { SessionDTOBuilder } from "@my-app/common";
+import { mapRecordToSessionDTO } from "@my-app/common";
 import type { SessionDTO } from "@my-app/common";
 
 export class SessionRepository {
   constructor(private readonly pool: Pool) {}
 
-  private mapRow(row: Record<string, unknown>): SessionDTO {
-    return new SessionDTOBuilder()
-      .setId(String(row["id"]))
-      .setUserId(String(row["user_id"]))
-      .setAccessToken(String(row["access_token"]))
-      .setRefreshToken(String(row["refresh_token"]))
-      .setJwtToken(row["jwt_token"] ? String(row["jwt_token"]) : undefined)
-      .setExpiresAt(new Date(String(row["expires_at"])))
-      .setCreatedAt(new Date(String(row["created_at"])))
-      .setUpdatedAt(new Date(String(row["updated_at"])))
-      .build();
-  }
+
 
   async findById(id: string): Promise<SessionDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
@@ -24,7 +13,7 @@ export class SessionRepository {
       [id]
     );
     const row = result.rows[0];
-    return row ? this.mapRow(row) : null;
+    return row ? mapRecordToSessionDTO(row) : null;
   }
 
   async findByUserId(userId: string): Promise<SessionDTO | null> {
@@ -33,7 +22,7 @@ export class SessionRepository {
       [userId]
     );
     const row = result.rows[0];
-    return row ? this.mapRow(row) : null;
+    return row ? mapRecordToSessionDTO(row) : null;
   }
 
   async findByJwtToken(jwtToken: string): Promise<SessionDTO | null> {
@@ -42,7 +31,7 @@ export class SessionRepository {
       [jwtToken]
     );
     const row = result.rows[0];
-    return row ? this.mapRow(row) : null;
+    return row ? mapRecordToSessionDTO(row) : null;
   }
 
   async create(data: Omit<SessionDTO, "id" | "createdAt" | "updatedAt">): Promise<SessionDTO> {
@@ -60,7 +49,7 @@ export class SessionRepository {
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to create session");
-    return this.mapRow(row);
+    return mapRecordToSessionDTO(row);
   }
 
   async update(id: string, data: Partial<Pick<SessionDTO, "accessToken" | "refreshToken" | "jwtToken" | "expiresAt">>): Promise<SessionDTO | null> {
@@ -95,7 +84,7 @@ export class SessionRepository {
       values
     );
     const row = result.rows[0];
-    return row ? this.mapRow(row) : null;
+    return row ? mapRecordToSessionDTO(row) : null;
   }
 
   async deleteById(id: string): Promise<boolean> {

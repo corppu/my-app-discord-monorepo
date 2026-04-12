@@ -1,22 +1,11 @@
 import type { Pool } from "pg";
-import { UserDTOBuilder } from "@my-app/common";
+import { mapRecordToUserDTO } from "@my-app/common";
 import type { UserDTO } from "@my-app/common";
 
 export class UserRepository {
   constructor(private readonly pool: Pool) {}
 
-  private mapRow(row: Record<string, unknown>): UserDTO {
-    return new UserDTOBuilder()
-      .setId(String(row["id"]))
-      .setDiscordId(String(row["discord_id"]))
-      .setUsername(String(row["username"]))
-      .setDisplayName(String(row["display_name"]))
-      .setEmail(row["email"] ? String(row["email"]) : undefined)
-      .setAvatarUrl(row["avatar_url"] ? String(row["avatar_url"]) : undefined)
-      .setCreatedAt(new Date(String(row["created_at"])))
-      .setUpdatedAt(new Date(String(row["updated_at"])))
-      .build();
-  }
+
 
   async findById(id: string): Promise<UserDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
@@ -24,7 +13,7 @@ export class UserRepository {
       [id]
     );
     const row = result.rows[0];
-    return row ? this.mapRow(row) : null;
+    return row ? mapRecordToUserDTO(row) : null;
   }
 
   async findByDiscordId(discordId: string): Promise<UserDTO | null> {
@@ -33,7 +22,7 @@ export class UserRepository {
       [discordId]
     );
     const row = result.rows[0];
-    return row ? this.mapRow(row) : null;
+    return row ? mapRecordToUserDTO(row) : null;
   }
 
   async upsert(data: Omit<UserDTO, "id" | "createdAt" | "updatedAt">): Promise<UserDTO> {
@@ -51,7 +40,7 @@ export class UserRepository {
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to upsert user");
-    return this.mapRow(row);
+    return mapRecordToUserDTO(row);
   }
 
   async delete(id: string): Promise<boolean> {
