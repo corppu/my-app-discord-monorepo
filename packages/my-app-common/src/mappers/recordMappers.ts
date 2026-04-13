@@ -4,16 +4,16 @@ import type {
   UserDTO,
   SessionDTO,
   EventDTO,
-} from "../types";
+} from "../types/index.js";
 import {
   GuildMemberDTOBuilder,
   UserDTOBuilder,
   SessionDTOBuilder,
   EventDTOBuilder,
-} from "../builders";
-import type { EventStatus, EventEntityType } from "../types";
+} from "../builders/index.js";
+import type { EventStatus, EventEntityType } from "../types/index.js";
 
-import { GuildDTOBuilder } from "../builders";
+import { GuildDTOBuilder } from "../builders/index.js";
 
 export function mapRecordToGuildDTO(row: Record<string, unknown>): GuildDTO {
   return new GuildDTOBuilder()

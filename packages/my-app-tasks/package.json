@@ -12,5 +12,6 @@
     "@my-app/backend": "*",
     "@my-app/common": "*"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "type": "module"
 }

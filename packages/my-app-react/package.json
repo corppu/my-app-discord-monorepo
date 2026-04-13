@@ -20,5 +20,6 @@
   "dependencies": {
     "@my-app/common": "*"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "type": "module"
 }

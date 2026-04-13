@@ -12,5 +12,6 @@
     "clean": "rm -rf dist",
     "setup-env": "node dist/scripts/setup-env.js"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "type": "module"
 }
