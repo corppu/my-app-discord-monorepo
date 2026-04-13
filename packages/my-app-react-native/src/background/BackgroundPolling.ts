@@ -1,9 +1,10 @@
 import { useEffect, useCallback } from "react";
 import { AppRegistry } from "react-native";
 import BackgroundFetch from "react-native-background-fetch";
+import Config from "react-native-config";
 import type { SessionDTO } from "@my-app/common";
 
-const API_BASE_URL = process.env["MY_APP_API_URL"] ?? "http://localhost:3000";
+const API_BASE_URL = Config.MY_APP_API_URL ?? "http://localhost:3000";
 
 async function pollSession(jwtToken: string): Promise<SessionDTO | null> {
   try {
@@ -28,7 +29,7 @@ export function useBackgroundPolling(
   onSessionUpdate: (session: SessionDTO | null) => void
 ): { startPolling: () => void; stopPolling: () => void } {
   const handleBackgroundTask = useCallback(
-    async (taskId: string) => {
+    async (taskId: string): Promise<void> => {
       if (!jwtToken) {
         BackgroundFetch.finish(taskId);
         return;
@@ -57,16 +58,16 @@ export function useBackgroundPolling(
       // Background fetch not supported
     });
 
-    return () => {
+    return (): void => {
       BackgroundFetch.stop().catch(() => undefined);
     };
   }, [handleBackgroundTask]);
 
-  const startPolling = useCallback(() => {
+  const startPolling = useCallback((): void => {
     BackgroundFetch.start().catch(() => undefined);
   }, []);
 
-  const stopPolling = useCallback(() => {
+  const stopPolling = useCallback((): void => {
     BackgroundFetch.stop().catch(() => undefined);
   }, []);
 
@@ -74,7 +75,7 @@ export function useBackgroundPolling(
 }
 
 export function registerHeadlessTask(): void {
-  AppRegistry.registerHeadlessTask("ReactNativeBackgroundFetch", () => async (event: { taskId: string }) => {
+  AppRegistry.registerHeadlessTask("ReactNativeBackgroundFetch", () => async (event: { taskId: string }): Promise<void> => {
     const { taskId } = event;
     BackgroundFetch.finish(taskId);
   });

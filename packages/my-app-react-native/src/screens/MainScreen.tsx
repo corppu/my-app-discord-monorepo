@@ -1,10 +1,11 @@
 import { View, StyleSheet } from "react-native";
 import type { JSX } from "react";
 import WebView from "react-native-webview";
+import Config from "react-native-config";
 import { useAuthContext } from "@my-app/react";
 import { useBackgroundPolling } from "../background/BackgroundPolling.js";
 
-const WEB_APP_URL = process.env["MY_APP_WEB_URL"] ?? "http://localhost:8080";
+const WEB_APP_URL = Config.MY_APP_WEB_URL ?? "http://localhost:8080";
 
 export function MainScreen(): JSX.Element {
   const { session, setSession } = useAuthContext();

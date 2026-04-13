@@ -1,6 +1,6 @@
 import type { Pool } from "pg";
 import { mapRecordToEventDTO } from "@my-app/common";
-import type { EventDTO, EventStatus, EventEntityType } from "@my-app/common";
+import type { EventDTO } from "@my-app/common";
 
 export class EventRepository {
   constructor(private readonly pool: Pool) {}
