@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist",
-    "setup-env": "node dist/scripts/setup-env.js"
+    "setup-env": "node dist/scripts/run.js"
   },
   "devDependencies": {},
   "type": "module"
