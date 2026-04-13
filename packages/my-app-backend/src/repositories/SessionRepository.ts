@@ -5,12 +5,10 @@ import type { SessionDTO } from "@my-app/common";
 export class SessionRepository {
   constructor(private readonly pool: Pool) {}
 
-
-
   async findById(id: string): Promise<SessionDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM sessions WHERE id = $1 AND expires_at > NOW()",
-      [id]
+      [id],
     );
     const row = result.rows[0];
     return row ? mapRecordToSessionDTO(row) : null;
@@ -19,7 +17,7 @@ export class SessionRepository {
   async findByUserId(userId: string): Promise<SessionDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM sessions WHERE user_id = $1 AND expires_at > NOW() ORDER BY created_at DESC LIMIT 1",
-      [userId]
+      [userId],
     );
     const row = result.rows[0];
     return row ? mapRecordToSessionDTO(row) : null;
@@ -28,13 +26,15 @@ export class SessionRepository {
   async findByJwtToken(jwtToken: string): Promise<SessionDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM sessions WHERE jwt_token = $1 AND expires_at > NOW()",
-      [jwtToken]
+      [jwtToken],
     );
     const row = result.rows[0];
     return row ? mapRecordToSessionDTO(row) : null;
   }
 
-  async create(data: Omit<SessionDTO, "id" | "createdAt" | "updatedAt">): Promise<SessionDTO> {
+  async create(
+    data: Omit<SessionDTO, "id" | "createdAt" | "updatedAt">,
+  ): Promise<SessionDTO> {
     const result = await this.pool.query<Record<string, unknown>>(
       `INSERT INTO sessions (user_id, access_token, refresh_token, jwt_token, expires_at)
        VALUES ($1, $2, $3, $4, $5)
@@ -45,14 +45,22 @@ export class SessionRepository {
         data.refreshToken,
         data.jwtToken ?? null,
         data.expiresAt,
-      ]
+      ],
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to create session");
     return mapRecordToSessionDTO(row);
   }
 
-  async update(id: string, data: Partial<Pick<SessionDTO, "accessToken" | "refreshToken" | "jwtToken" | "expiresAt">>): Promise<SessionDTO | null> {
+  async update(
+    id: string,
+    data: Partial<
+      Pick<
+        SessionDTO,
+        "accessToken" | "refreshToken" | "jwtToken" | "expiresAt"
+      >
+    >,
+  ): Promise<SessionDTO | null> {
     const sets: string[] = [];
     const values: unknown[] = [];
     let idx = 1;
@@ -81,20 +89,22 @@ export class SessionRepository {
 
     const result = await this.pool.query<Record<string, unknown>>(
       `UPDATE sessions SET ${sets.join(", ")} WHERE id = $${idx} RETURNING *`,
-      values
+      values,
     );
     const row = result.rows[0];
     return row ? mapRecordToSessionDTO(row) : null;
   }
 
   async deleteById(id: string): Promise<boolean> {
-    const result = await this.pool.query("DELETE FROM sessions WHERE id = $1", [id]);
+    const result = await this.pool.query("DELETE FROM sessions WHERE id = $1", [
+      id,
+    ]);
     return (result.rowCount ?? 0) > 0;
   }
 
   async deleteExpired(): Promise<number> {
     const result = await this.pool.query(
-      "DELETE FROM sessions WHERE expires_at <= NOW()"
+      "DELETE FROM sessions WHERE expires_at <= NOW()",
     );
     return result.rowCount ?? 0;
   }
@@ -102,7 +112,7 @@ export class SessionRepository {
   async deleteByUserId(userId: string): Promise<number> {
     const result = await this.pool.query(
       "DELETE FROM sessions WHERE user_id = $1",
-      [userId]
+      [userId],
     );
     return result.rowCount ?? 0;
   }

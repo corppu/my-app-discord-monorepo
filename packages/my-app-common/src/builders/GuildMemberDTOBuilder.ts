@@ -2,7 +2,8 @@ import { ValidationError } from "../errors/ValidationError.js";
 import type { Locale } from "../translations/index.js";
 import type { GuildMemberDTO } from "../types/dtos.js";
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const DISCORD_ID_REGEX = /^\d{17,19}$/;
 
 export class GuildMemberDTOBuilder {
@@ -49,7 +50,11 @@ export class GuildMemberDTOBuilder {
       throw new ValidationError("validation.required", "guildId", this.locale);
     }
     if (!DISCORD_ID_REGEX.test(guildId)) {
-      throw new ValidationError("validation.invalidDiscordId", "guildId", this.locale);
+      throw new ValidationError(
+        "validation.invalidDiscordId",
+        "guildId",
+        this.locale,
+      );
     }
 
     if (!roles) {
@@ -57,7 +62,11 @@ export class GuildMemberDTOBuilder {
     }
 
     if (!joinedAt || !(joinedAt instanceof Date) || isNaN(joinedAt.getTime())) {
-      throw new ValidationError("validation.invalidDate", "joinedAt", this.locale);
+      throw new ValidationError(
+        "validation.invalidDate",
+        "joinedAt",
+        this.locale,
+      );
     }
 
     return {

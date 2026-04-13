@@ -32,7 +32,7 @@ export function useDTOValidation<T>(): {
         const unknownError = new ValidationError(
           "validation.required",
           "unknown",
-          "en"
+          "en",
         );
         setResult({ value: null, error: unknownError, isValid: false });
       }

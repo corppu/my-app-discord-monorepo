@@ -5,12 +5,10 @@ import type { EventDTO } from "@my-app/common";
 export class EventRepository {
   constructor(private readonly pool: Pool) {}
 
-
-
   async findById(id: string): Promise<EventDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM events WHERE id = $1",
-      [id]
+      [id],
     );
     const row = result.rows[0];
     return row ? mapRecordToEventDTO(row) : null;
@@ -19,12 +17,14 @@ export class EventRepository {
   async findByGuildId(guildId: string): Promise<EventDTO[]> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM events WHERE guild_id = $1 ORDER BY scheduled_start_at ASC",
-      [guildId]
+      [guildId],
     );
     return result.rows.map((row) => mapRecordToEventDTO(row));
   }
 
-  async upsert(data: Omit<EventDTO, "id" | "createdAt" | "updatedAt"> & { id?: string }): Promise<EventDTO> {
+  async upsert(
+    data: Omit<EventDTO, "id" | "createdAt" | "updatedAt"> & { id?: string },
+  ): Promise<EventDTO> {
     const result = await this.pool.query<Record<string, unknown>>(
       `INSERT INTO events (id, guild_id, name, description, channel_id, scheduled_start_at, scheduled_end_at, status, entity_type)
        VALUES (COALESCE($1, uuid_generate_v4()), $2, $3, $4, $5, $6, $7, $8, $9)
@@ -48,7 +48,7 @@ export class EventRepository {
         data.scheduledEndAt ?? null,
         data.status,
         data.entityType,
-      ]
+      ],
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to upsert event");
@@ -56,7 +56,9 @@ export class EventRepository {
   }
 
   async delete(id: string): Promise<boolean> {
-    const result = await this.pool.query("DELETE FROM events WHERE id = $1", [id]);
+    const result = await this.pool.query("DELETE FROM events WHERE id = $1", [
+      id,
+    ]);
     return (result.rowCount ?? 0) > 0;
   }
 }

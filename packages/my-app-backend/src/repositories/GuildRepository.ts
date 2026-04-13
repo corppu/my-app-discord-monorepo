@@ -5,12 +5,10 @@ import type { GuildMemberDTO, GuildDTO } from "@my-app/common";
 export class GuildRepository {
   constructor(private readonly pool: Pool) {}
 
-
-
   async findGuildById(id: string): Promise<GuildDTO | null> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM guilds WHERE id = $1",
-      [id]
+      [id],
     );
     const row = result.rows[0];
     return row ? mapRecordToGuildDTO(row) : null;
@@ -26,7 +24,7 @@ export class GuildRepository {
          member_count = EXCLUDED.member_count,
          updated_at = NOW()
        RETURNING *`,
-      [data.id, data.name, data.iconUrl ?? null, data.memberCount]
+      [data.id, data.name, data.iconUrl ?? null, data.memberCount],
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to upsert guild");
@@ -36,7 +34,7 @@ export class GuildRepository {
   async findMembersByGuildId(guildId: string): Promise<GuildMemberDTO[]> {
     const result = await this.pool.query<Record<string, unknown>>(
       "SELECT * FROM guild_members WHERE guild_id = $1",
-      [guildId]
+      [guildId],
     );
     return result.rows.map((row) => mapRecordToGuildMemberDTO(row));
   }
@@ -50,7 +48,13 @@ export class GuildRepository {
          roles = EXCLUDED.roles,
          updated_at = NOW()
        RETURNING *`,
-      [data.userId, data.guildId, data.nickname ?? null, data.roles, data.joinedAt]
+      [
+        data.userId,
+        data.guildId,
+        data.nickname ?? null,
+        data.roles,
+        data.joinedAt,
+      ],
     );
     const row = result.rows[0];
     if (!row) throw new Error("Failed to upsert guild member");
@@ -60,7 +64,7 @@ export class GuildRepository {
   async deleteMember(userId: string, guildId: string): Promise<boolean> {
     const result = await this.pool.query(
       "DELETE FROM guild_members WHERE user_id = $1 AND guild_id = $2",
-      [userId, guildId]
+      [userId, guildId],
     );
     return (result.rowCount ?? 0) > 0;
   }

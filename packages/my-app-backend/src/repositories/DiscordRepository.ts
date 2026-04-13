@@ -1,4 +1,9 @@
-import { Client, GatewayIntentBits, type Guild, type GuildMember } from "discord.js";
+import {
+  Client,
+  GatewayIntentBits,
+  type Guild,
+  type GuildMember,
+} from "discord.js";
 import type { GuildDTO, UserDTO, GuildMemberDTO } from "@my-app/common";
 
 export class DiscordRepository {
@@ -53,7 +58,11 @@ export class DiscordRepository {
     }
   }
 
-  async fetchGuildMembers(guildId: string): Promise<Array<{ user: Partial<UserDTO>; member: Partial<GuildMemberDTO> }>> {
+  async fetchGuildMembers(
+    guildId: string,
+  ): Promise<
+    Array<{ user: Partial<UserDTO>; member: Partial<GuildMemberDTO> }>
+  > {
     this.ensureReady();
     const guild = await this.client.guilds.fetch(guildId);
     const members = await guild.members.fetch();
@@ -78,7 +87,9 @@ export class DiscordRepository {
       }));
   }
 
-  async fetchScheduledEvents(guildId: string): Promise<Array<Record<string, unknown>>> {
+  async fetchScheduledEvents(
+    guildId: string,
+  ): Promise<Array<Record<string, unknown>>> {
     this.ensureReady();
     const guild = await this.client.guilds.fetch(guildId);
     const events = await guild.scheduledEvents.fetch();

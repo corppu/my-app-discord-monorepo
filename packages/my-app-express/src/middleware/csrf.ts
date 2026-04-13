@@ -11,7 +11,11 @@ const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
  * On state-changing requests (POST/PUT/PATCH/DELETE), validates the
  * X-CSRF-Token header matches the cookie value.
  */
-export function csrfProtection(req: Request, res: Response, next: NextFunction): void {
+export function csrfProtection(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
   const isSecure = process.env["NODE_ENV"] === "production";
 
   if (SAFE_METHODS.has(req.method)) {

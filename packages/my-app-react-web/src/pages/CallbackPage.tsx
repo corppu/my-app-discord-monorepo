@@ -18,7 +18,9 @@ export function CallbackPage(): JSX.Element {
       return;
     }
 
-    fetch(`/api/auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`)
+    fetch(
+      `/api/auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`,
+    )
       .then((res) => res.json())
       .then((data: unknown) => {
         if (data && typeof data === "object") {

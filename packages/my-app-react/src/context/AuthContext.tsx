@@ -1,4 +1,11 @@
-import { createContext, useContext, type ReactNode, type JSX, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  type ReactNode,
+  type JSX,
+  useState,
+  useCallback,
+} from "react";
 import type { SessionDTO } from "@my-app/common";
 
 interface AuthContextValue {
@@ -10,7 +17,11 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
+export function AuthProvider({
+  children,
+}: {
+  children: ReactNode;
+}): JSX.Element {
   const [session, setSessionState] = useState<SessionDTO | null>(null);
 
   const setSession = useCallback((newSession: SessionDTO | null) => {
@@ -24,7 +35,9 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   const isAuthenticated = session !== null && session.expiresAt > new Date();
 
   return (
-    <AuthContext.Provider value={{ session, isAuthenticated, setSession, clearSession }}>
+    <AuthContext.Provider
+      value={{ session, isAuthenticated, setSession, clearSession }}
+    >
       {children}
     </AuthContext.Provider>
   );

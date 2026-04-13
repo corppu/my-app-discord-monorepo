@@ -31,7 +31,11 @@ export class AuthCallbackDTOBuilder {
       throw new ValidationError("validation.required", "state", this.locale);
     }
     if (state.trim().length === 0) {
-      throw new ValidationError("validation.invalidState", "state", this.locale);
+      throw new ValidationError(
+        "validation.invalidState",
+        "state",
+        this.locale,
+      );
     }
 
     return { code, state };

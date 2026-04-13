@@ -22,9 +22,11 @@ export const ENV_SCHEMA: EnvConfig = {
     },
     {
       key: "DATABASE_URL",
-      description: "PostgreSQL connection URL (e.g. postgresql://user:pass@host:5432/db)",
+      description:
+        "PostgreSQL connection URL (e.g. postgresql://user:pass@host:5432/db)",
       required: true,
-      validate: (v) => v.startsWith("postgresql://") || v.startsWith("postgres://"),
+      validate: (v) =>
+        v.startsWith("postgresql://") || v.startsWith("postgres://"),
       sensitive: true,
     },
     {
@@ -63,7 +65,8 @@ export const ENV_SCHEMA: EnvConfig = {
       key: "DISCORD_GUILD_IDS",
       description: "Comma-separated list of Discord guild IDs to synchronize",
       required: true,
-      validate: (v) => v.split(",").every((id) => /^\d{17,19}$/.test(id.trim())),
+      validate: (v) =>
+        v.split(",").every((id) => /^\d{17,19}$/.test(id.trim())),
     },
     {
       key: "EXPRESS_PORT",
@@ -74,7 +77,8 @@ export const ENV_SCHEMA: EnvConfig = {
     },
     {
       key: "OPENID_ISSUER_URL",
-      description: "OpenID Connect issuer URL (e.g. https://accounts.google.com)",
+      description:
+        "OpenID Connect issuer URL (e.g. https://accounts.google.com)",
       required: true,
       validate: (v) => v.startsWith("https://"),
     },
@@ -91,7 +95,8 @@ export const ENV_SCHEMA: EnvConfig = {
     },
     {
       key: "OPENID_REDIRECT_URI",
-      description: "OpenID Connect redirect URI (e.g. http://localhost:3000/auth/callback)",
+      description:
+        "OpenID Connect redirect URI (e.g. http://localhost:3000/auth/callback)",
       required: true,
       validate: (v) => v.startsWith("http://") || v.startsWith("https://"),
     },

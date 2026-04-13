@@ -10,20 +10,22 @@ export async function getOidcConfig(): Promise<openidClient.Configuration> {
 
     if (!issuerUrl || !clientId || !clientSecret) {
       throw new Error(
-        "OPENID_ISSUER_URL, OPENID_CLIENT_ID and OPENID_CLIENT_SECRET are required"
+        "OPENID_ISSUER_URL, OPENID_CLIENT_ID and OPENID_CLIENT_SECRET are required",
       );
     }
 
     oidcConfig = await openidClient.discovery(
       new URL(issuerUrl),
       clientId,
-      clientSecret
+      clientSecret,
     );
   }
   return oidcConfig;
 }
 
-type TokenResponse = Awaited<ReturnType<typeof openidClient.authorizationCodeGrant>>;
+type TokenResponse = Awaited<
+  ReturnType<typeof openidClient.authorizationCodeGrant>
+>;
 
 export async function buildAuthUrl(state: string, nonce: string): Promise<URL> {
   const config = await getOidcConfig();
@@ -42,7 +44,7 @@ export async function exchangeCode(
   code: string,
   state: string,
   expectedState: string,
-  nonce: string
+  nonce: string,
 ): Promise<TokenResponse> {
   const config = await getOidcConfig();
   const redirectUri = process.env["OPENID_REDIRECT_URI"];
@@ -60,7 +62,7 @@ export async function exchangeCode(
 }
 
 export async function refreshTokens(
-  refreshToken: string
+  refreshToken: string,
 ): Promise<TokenResponse> {
   const config = await getOidcConfig();
   return openidClient.refreshTokenGrant(config, refreshToken);

@@ -5,5 +5,7 @@ export async function cleanupExpiredSessions(): Promise<void> {
   const sessionRepo = new SessionRepository(pool);
 
   const deletedCount = await sessionRepo.deleteExpired();
-  console.log(`[session-cleanup] Deleted ${deletedCount} expired sessions at ${new Date().toISOString()}`);
+  console.log(
+    `[session-cleanup] Deleted ${deletedCount} expired sessions at ${new Date().toISOString()}`,
+  );
 }

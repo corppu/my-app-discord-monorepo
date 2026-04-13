@@ -12,11 +12,10 @@ export function DashboardPage(): JSX.Element {
   }
 
   const handleLogout = (): void => {
-    fetch("/api/auth/logout", { method: "POST" })
-      .finally(() => {
-        clearSession();
-        navigate("/");
-      });
+    fetch("/api/auth/logout", { method: "POST" }).finally(() => {
+      clearSession();
+      navigate("/");
+    });
   };
 
   return (

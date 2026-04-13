@@ -10,7 +10,7 @@ export const translations: TranslationMap = { en, fi };
 export function translate(
   key: TranslationKey,
   locale: Locale = "en",
-  vars: Record<string, string> = {}
+  vars: Record<string, string> = {},
 ): string {
   const map = translations[locale] ?? translations["en"];
   let message = map[key] ?? key;

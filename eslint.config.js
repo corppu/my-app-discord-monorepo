@@ -7,37 +7,40 @@ export default [
   // Node.js environment for backend, scripts, tasks, etc.
   {
     files: [
-        "packages/my-app-backend/**/*.ts",
-        "packages/my-app-discord-bot/**/*.ts",
-        "packages/my-app-express/**/*.ts",
-        "packages/my-app-tasks/**/*.ts",
-        "packages/my-app-tools/**/*.ts"
-      ],
-      languageOptions: {
-        parser: tsParser,
-        parserOptions: {
-          projectService: true,
-          tsconfigRootDir: import.meta.dirname,
-        },
-        globals: {
-          process: "readonly",
-          console: "readonly",
-          setInterval: "readonly",
-          clearInterval: "readonly",
-          Buffer: "readonly"
-        }
+      "packages/my-app-backend/**/*.ts",
+      "packages/my-app-discord-bot/**/*.ts",
+      "packages/my-app-express/**/*.ts",
+      "packages/my-app-tasks/**/*.ts",
+      "packages/my-app-tools/**/*.ts",
+    ],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
-      plugins: {
-        "@typescript-eslint": tsPlugin,
-      },
-      rules: {
-        ...tsPlugin.configs["recommended"].rules,
-        "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-        "@typescript-eslint/explicit-function-return-type": "warn",
-        "@typescript-eslint/no-explicit-any": "error",
-        "@typescript-eslint/consistent-type-imports": "error",
+      globals: {
+        process: "readonly",
+        console: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        Buffer: "readonly",
       },
     },
+    plugins: {
+      "@typescript-eslint": tsPlugin,
+    },
+    rules: {
+      ...tsPlugin.configs["recommended"].rules,
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/consistent-type-imports": "error",
+    },
+  },
   // Browser environment for React web and React Native
   {
     files: [
@@ -46,7 +49,7 @@ export default [
       "packages/my-app-react-web/**/*.ts",
       "packages/my-app-react-web/**/*.tsx",
       "packages/my-app-react-native/**/*.ts",
-      "packages/my-app-react-native/**/*.tsx"
+      "packages/my-app-react-native/**/*.tsx",
     ],
     languageOptions: {
       parser: tsParser,
@@ -61,15 +64,18 @@ export default [
         console: "readonly",
         process: "readonly",
         setTimeout: "readonly",
-        clearTimeout: "readonly"
-      }
+        clearTimeout: "readonly",
+      },
     },
     plugins: {
       "@typescript-eslint": tsPlugin,
     },
     rules: {
       ...tsPlugin.configs["recommended"].rules,
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_" },
+      ],
       "@typescript-eslint/explicit-function-return-type": "warn",
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-imports": "error",

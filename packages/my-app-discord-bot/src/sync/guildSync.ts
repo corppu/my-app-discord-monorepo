@@ -1,27 +1,44 @@
 import type { Client } from "discord.js";
-import { GuildRepository, UserRepository, EventRepository, getPool } from "@my-app/backend";
+import {
+  GuildRepository,
+  UserRepository,
+  EventRepository,
+  getPool,
+} from "@my-app/backend";
 import type { EventStatus, EventEntityType } from "@my-app/common";
 
 function discordEventStatusToEventStatus(status: number): EventStatus {
   switch (status) {
-    case 1: return "SCHEDULED";
-    case 2: return "ACTIVE";
-    case 3: return "COMPLETED";
-    case 4: return "CANCELED";
-    default: return "SCHEDULED";
+    case 1:
+      return "SCHEDULED";
+    case 2:
+      return "ACTIVE";
+    case 3:
+      return "COMPLETED";
+    case 4:
+      return "CANCELED";
+    default:
+      return "SCHEDULED";
   }
 }
 
 function discordEntityTypeToEntityType(entityType: number): EventEntityType {
   switch (entityType) {
-    case 1: return "STAGE_INSTANCE";
-    case 2: return "VOICE";
-    case 3: return "EXTERNAL";
-    default: return "EXTERNAL";
+    case 1:
+      return "STAGE_INSTANCE";
+    case 2:
+      return "VOICE";
+    case 3:
+      return "EXTERNAL";
+    default:
+      return "EXTERNAL";
   }
 }
 
-export async function syncGuild(client: Client, guildId: string): Promise<void> {
+export async function syncGuild(
+  client: Client,
+  guildId: string,
+): Promise<void> {
   const pool = getPool();
   const guildRepo = new GuildRepository(pool);
   const userRepo = new UserRepository(pool);
@@ -54,7 +71,9 @@ export async function syncGuild(client: Client, guildId: string): Promise<void> 
         userId: user.id,
         guildId: discordGuild.id,
         nickname: member.nickname ?? undefined,
-        roles: member.roles.cache.filter((r) => r.name !== "@everyone").map((r) => r.id),
+        roles: member.roles.cache
+          .filter((r) => r.name !== "@everyone")
+          .map((r) => r.id),
         joinedAt: member.joinedAt ?? new Date(),
       });
     } catch (err) {
@@ -84,7 +103,10 @@ export async function syncGuild(client: Client, guildId: string): Promise<void> 
   console.log(`Guild ${guildId} sync completed`);
 }
 
-export async function syncAllGuilds(client: Client, guildIds: string[]): Promise<void> {
+export async function syncAllGuilds(
+  client: Client,
+  guildIds: string[],
+): Promise<void> {
   for (const guildId of guildIds) {
     await syncGuild(client, guildId).catch((err) => {
       console.error(`Failed to sync guild ${guildId}:`, err);

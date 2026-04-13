@@ -46,7 +46,12 @@ authRouter.get("/callback", async (req, res) => {
     return;
   }
 
-  const tokens = await exchangeCode(callbackDto.code, callbackDto.state, expectedState, nonce);
+  const tokens = await exchangeCode(
+    callbackDto.code,
+    callbackDto.state,
+    expectedState,
+    nonce,
+  );
 
   const claims = tokens.claims();
   if (!claims) {
@@ -62,7 +67,9 @@ authRouter.get("/callback", async (req, res) => {
   const user = await userRepo.upsert({
     discordId: sub,
     username: String(claims["preferred_username"] ?? claims["sub"]),
-    displayName: String(claims["name"] ?? claims["preferred_username"] ?? claims["sub"]),
+    displayName: String(
+      claims["name"] ?? claims["preferred_username"] ?? claims["sub"],
+    ),
     email: claims["email"] ? String(claims["email"]) : undefined,
     avatarUrl: claims["picture"] ? String(claims["picture"]) : undefined,
   });
@@ -103,7 +110,10 @@ authRouter.post("/native-token", requireAuth, async (req: AuthRequest, res) => {
   const jwtExpiresAt = getJwtExpiresAt();
   const jwtToken = signJwt({ sub: session.userId, sessionId: session.id });
 
-  const updated = await sessionRepo.update(session.id, { jwtToken, expiresAt: jwtExpiresAt });
+  const updated = await sessionRepo.update(session.id, {
+    jwtToken,
+    expiresAt: jwtExpiresAt,
+  });
   if (!updated) {
     res.status(500).json({ error: "Failed to update session" });
     return;

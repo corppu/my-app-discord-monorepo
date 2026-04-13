@@ -1,4 +1,3 @@
-
 import type { Request, Response, NextFunction } from "express";
 import { SessionRepository } from "@my-app/backend";
 import { getPool } from "@my-app/backend";
@@ -10,11 +9,10 @@ export interface AuthRequest extends Request {
   userId?: string;
 }
 
-
 export async function requireAuth(
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   const sessionId = req.cookies?.["session_id"] as string | undefined;
 
@@ -44,7 +42,7 @@ export async function requireAuth(
 export async function requireNativeAuth(
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   const authHeader = req.headers["authorization"];
 
@@ -58,7 +56,9 @@ export async function requireNativeAuth(
   try {
     const payload = verifyJwt(jwtToken);
     const sessionRepo = new SessionRepository(getPool());
-    const session = await sessionRepo.findByJwtToken(jwtToken).catch(() => null);
+    const session = await sessionRepo
+      .findByJwtToken(jwtToken)
+      .catch(() => null);
 
     if (!session) {
       res.status(401).json({ error: "Session not found or expired" });

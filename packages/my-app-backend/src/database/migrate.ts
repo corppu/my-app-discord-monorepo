@@ -81,12 +81,24 @@ export async function runMigrations(): Promise<void> {
     `);
 
     // Create indexes
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id)`);
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at)`);
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_sessions_jwt_token ON sessions(jwt_token) WHERE jwt_token IS NOT NULL`);
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_guild_members_guild_id ON guild_members(guild_id)`);
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_events_guild_id ON events(guild_id)`);
-    await client.query(`CREATE INDEX IF NOT EXISTS idx_events_scheduled_start ON events(scheduled_start_at)`);
+    await client.query(
+      `CREATE INDEX IF NOT EXISTS idx_sessions_user_id ON sessions(user_id)`,
+    );
+    await client.query(
+      `CREATE INDEX IF NOT EXISTS idx_sessions_expires_at ON sessions(expires_at)`,
+    );
+    await client.query(
+      `CREATE INDEX IF NOT EXISTS idx_sessions_jwt_token ON sessions(jwt_token) WHERE jwt_token IS NOT NULL`,
+    );
+    await client.query(
+      `CREATE INDEX IF NOT EXISTS idx_guild_members_guild_id ON guild_members(guild_id)`,
+    );
+    await client.query(
+      `CREATE INDEX IF NOT EXISTS idx_events_guild_id ON events(guild_id)`,
+    );
+    await client.query(
+      `CREATE INDEX IF NOT EXISTS idx_events_scheduled_start ON events(scheduled_start_at)`,
+    );
 
     await client.query("COMMIT");
     console.log("Database migrations completed successfully");

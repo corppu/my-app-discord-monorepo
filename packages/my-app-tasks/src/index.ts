@@ -4,11 +4,13 @@ import { closePool } from "@my-app/backend";
 // Interval in milliseconds (default: 1 hour)
 const CLEANUP_INTERVAL_MS = parseInt(
   process.env["CLEANUP_INTERVAL_MS"] ?? String(60 * 60 * 1000),
-  10
+  10,
 );
 
 async function runTasks(): Promise<void> {
-  console.log(`my-app-tasks started. Cleanup interval: ${CLEANUP_INTERVAL_MS}ms`);
+  console.log(
+    `my-app-tasks started. Cleanup interval: ${CLEANUP_INTERVAL_MS}ms`,
+  );
 
   // Run immediately on startup
   await cleanupExpiredSessions().catch((err) => {

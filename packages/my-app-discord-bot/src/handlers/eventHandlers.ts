@@ -1,24 +1,38 @@
 import type { Client, GuildMember, GuildScheduledEvent } from "discord.js";
 import { Events } from "discord.js";
-import { GuildRepository, UserRepository, EventRepository, getPool } from "@my-app/backend";
+import {
+  GuildRepository,
+  UserRepository,
+  EventRepository,
+  getPool,
+} from "@my-app/backend";
 import type { EventStatus, EventEntityType } from "@my-app/common";
 
 function discordEventStatusToEventStatus(status: number): EventStatus {
   switch (status) {
-    case 1: return "SCHEDULED";
-    case 2: return "ACTIVE";
-    case 3: return "COMPLETED";
-    case 4: return "CANCELED";
-    default: return "SCHEDULED";
+    case 1:
+      return "SCHEDULED";
+    case 2:
+      return "ACTIVE";
+    case 3:
+      return "COMPLETED";
+    case 4:
+      return "CANCELED";
+    default:
+      return "SCHEDULED";
   }
 }
 
 function discordEntityTypeToEntityType(entityType: number): EventEntityType {
   switch (entityType) {
-    case 1: return "STAGE_INSTANCE";
-    case 2: return "VOICE";
-    case 3: return "EXTERNAL";
-    default: return "EXTERNAL";
+    case 1:
+      return "STAGE_INSTANCE";
+    case 2:
+      return "VOICE";
+    case 3:
+      return "EXTERNAL";
+    default:
+      return "EXTERNAL";
   }
 }
 
@@ -51,7 +65,9 @@ export function registerEventHandlers(client: Client): void {
         userId: user.id,
         guildId: member.guild.id,
         nickname: member.nickname ?? undefined,
-        roles: member.roles.cache.filter((r) => r.name !== "@everyone").map((r) => r.id),
+        roles: member.roles.cache
+          .filter((r) => r.name !== "@everyone")
+          .map((r) => r.id),
         joinedAt: member.joinedAt ?? new Date(),
       });
     } catch (err) {
@@ -72,25 +88,32 @@ export function registerEventHandlers(client: Client): void {
   });
 
   // Guild member update
-  client.on(Events.GuildMemberUpdate, async (_oldMember, newMember: GuildMember) => {
-    try {
-      const user = await userRepo.findByDiscordId(newMember.user.id);
-      if (!user) return;
+  client.on(
+    Events.GuildMemberUpdate,
+    async (_oldMember, newMember: GuildMember) => {
+      try {
+        const user = await userRepo.findByDiscordId(newMember.user.id);
+        if (!user) return;
 
-      await guildRepo.upsertMember({
-        userId: user.id,
-        guildId: newMember.guild.id,
-        nickname: newMember.nickname ?? undefined,
-        roles: newMember.roles.cache.filter((r) => r.name !== "@everyone").map((r) => r.id),
-        joinedAt: newMember.joinedAt ?? new Date(),
-      });
-    } catch (err) {
-      console.error("Error handling GuildMemberUpdate:", err);
-    }
-  });
+        await guildRepo.upsertMember({
+          userId: user.id,
+          guildId: newMember.guild.id,
+          nickname: newMember.nickname ?? undefined,
+          roles: newMember.roles.cache
+            .filter((r) => r.name !== "@everyone")
+            .map((r) => r.id),
+          joinedAt: newMember.joinedAt ?? new Date(),
+        });
+      } catch (err) {
+        console.error("Error handling GuildMemberUpdate:", err);
+      }
+    },
+  );
 
   // Scheduled event create/update
-  const handleScheduledEvent = async (event: GuildScheduledEvent): Promise<void> => {
+  const handleScheduledEvent = async (
+    event: GuildScheduledEvent,
+  ): Promise<void> => {
     try {
       await eventRepo.upsert({
         guildId: event.guildId,
