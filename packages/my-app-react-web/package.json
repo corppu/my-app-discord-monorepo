@@ -11,11 +11,12 @@
   "dependencies": {
     "@my-app/common": "*",
     "@my-app/react": "*",
-    "react-router-dom": "^7.14.0"
+    "@my-app/react-components": "*",
+    "react-router-dom": "^7.15.1"
   },
   "devDependencies": {
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "vite": "^8.0.10"
+    "@vitejs/plugin-react": "^6.0.2",
+    "vite": "^8.0.14"
   }
 }

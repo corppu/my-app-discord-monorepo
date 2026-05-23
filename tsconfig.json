@@ -4,5 +4,6 @@
     "target": "ES2022",
     "module": "Node16",
     "moduleResolution": "Node16"
-  }
+  },
+  "include": ["packages/**/*", ".storybook/**/*.ts", ".storybook/**/*.tsx"]
 }
