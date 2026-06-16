@@ -1,0 +1,20 @@
+{
+  "name": "@my-app/common",
+  "version": "1.0.0",
+  "description": "Common DTO types, builders, and translations for my-app",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext .ts"
+  },
+  "devDependencies": {},
+  "type": "module"
+}

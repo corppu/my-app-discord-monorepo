@@ -1,0 +1,17 @@
+{
+  "name": "@my-app/tasks",
+  "version": "1.0.0",
+  "description": "Scheduled tasks for maintenance operations",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@my-app/backend": "*",
+    "@my-app/common": "*"
+  },
+  "devDependencies": {},
+  "type": "module"
+}

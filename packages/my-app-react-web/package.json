@@ -1,0 +1,22 @@
+{
+  "name": "@my-app/react-web",
+  "version": "1.0.0",
+  "description": "React web application for browsers",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@my-app/common": "*",
+    "@my-app/react": "*",
+    "@my-app/react-components": "*",
+    "react-router-dom": "^7.15.1"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "vite": "^8.0.14"
+  }
+}

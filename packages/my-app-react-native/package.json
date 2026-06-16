@@ -1,0 +1,22 @@
+{
+  "name": "@my-app/react-native",
+  "version": "1.0.0",
+  "description": "React Native mobile application",
+  "main": "./src/index.tsx",
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "build:android": "cd android && ./gradlew assembleRelease",
+    "build": "echo 'No build step for react-native'",
+    "clean": "rm -rf node_modules/.cache"
+  },
+  "dependencies": {
+    "@my-app/common": "*",
+    "@my-app/react": "*",
+    "@react-native-community/netinfo": "^12.0.1",
+    "react-native-background-fetch": "^4.4.2",
+    "react-native-config": "^1.6.1",
+    "react-native-webview": "^13.16.1"
+  }
+}

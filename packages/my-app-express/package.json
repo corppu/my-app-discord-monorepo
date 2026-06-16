@@ -1,0 +1,29 @@
+{
+  "name": "@my-app/express",
+  "version": "1.0.0",
+  "description": "Express REST API with OpenID authentication",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "node --watch dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@my-app/backend": "*",
+    "@my-app/common": "*",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "openid-client": "^6.8.2"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10"
+  }
+}
